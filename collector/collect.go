@@ -61,7 +61,7 @@ func (c *Collector) Collect(dn string) error {
 		Scope:        ldap.ScopeWholeSubtree,
 		DerefAliases: ldap.NeverDerefAliases,
 		Filter:       "(objectClass=*)",
-		Attributes:   []string{ldapsupport.AttrObjectSid, ldapsupport.AttrSamAccountName, ldapsupport.AttrMember, ldapsupport.AttrPrimaryGroupID, ldapsupport.AttrObjectClass, ldapsupport.AttrNTSecurityDescriptor},
+		Attributes:   []string{ldapsupport.AttrObjectSid, ldapsupport.AttrSamAccountName, ldapsupport.AttrMember, ldapsupport.AttrPrimaryGroupID, ldapsupport.AttrObjectClass, ldapsupport.AttrNTSecurityDescriptor, ldapsupport.AttrGroupMSAMembership},
 		Controls:     []ldap.Control{sdFlagsCtrl, pagingCtrl},
 	}
 

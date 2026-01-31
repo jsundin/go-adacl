@@ -45,10 +45,22 @@ func (c *Collector) processObject(ent *ldap.Entry) error {
 
 	for _, rawSD := range ent.GetRawAttributeValues(ldapsupport.AttrNTSecurityDescriptor) {
 		if sddl, err := sddlparse.SDDLFromBinary(rawSD); err != nil {
-			logrus.Warnf("could not parse sddl for: dn='%s'", ent.DN)
+			logrus.Warnf("could not parse sddl for: dn='%s'", ent.DN, err)
 		} else {
 			for _, ace := range sddl.DACL {
 				aceEntry := c.processAce(ace)
+				c.AcesByDN[ent.DN] = append(c.AcesByDN[ent.DN], aceEntry)
+			}
+		}
+	}
+
+	for _, rawSD := range ent.GetRawAttributeValues(ldapsupport.AttrGroupMSAMembership) {
+		if sddl, err := sddlparse.SDDLFromBinary(rawSD); err != nil {
+			logrus.Warnf("could not parse gmsa sddl for: dn='%s': %s", ent.DN, err)
+		} else {
+			for _, ace := range sddl.DACL {
+				aceEntry := c.processAce(ace)
+				aceEntry.ObjectType = optional.Of("888eedd6-ce04-df40-b462-b8a50e41ba38") // ms-DS-GroupMSAMembership
 				c.AcesByDN[ent.DN] = append(c.AcesByDN[ent.DN], aceEntry)
 			}
 		}

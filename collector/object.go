@@ -45,7 +45,7 @@ func (c *Collector) processObject(ent *ldap.Entry) error {
 
 	for _, rawSD := range ent.GetRawAttributeValues(ldapsupport.AttrNTSecurityDescriptor) {
 		if sddl, err := sddlparse.SDDLFromBinary(rawSD); err != nil {
-			logrus.Warnf("could not parse sddl for: dn='%s'", ent.DN, err)
+			logrus.Warnf("could not parse sddl for: dn='%s': %s", ent.DN, err)
 		} else {
 			for _, ace := range sddl.DACL {
 				aceEntry := c.processAce(ace)

@@ -176,6 +176,7 @@ func resolveFilters(c *collector.Collector) filters.FilterSet {
 			resolvedExcludeSids = append(resolvedExcludeSids, pattern)
 		}
 	}
+
 	filterSet := filters.FilterSet{}
 
 	if len(appConf.Filters.IncludeDNs) > 0 {
@@ -213,6 +214,5 @@ func resolveFilters(c *collector.Collector) filters.FilterSet {
 	if appConf.Filters.ExcludeInherited {
 		filterSet.Add(filters.Exclude, filters.NewAceFlagsMatcher([]sddlparse.AceFlag{sddlparse.ACEFLAG_INHERITED}))
 	}
-
 	return filterSet
 }

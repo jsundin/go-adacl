@@ -89,16 +89,16 @@ func (pAce *ParsedAce) Print() {
 	pAce.Trustee.PrincipalType.IfPresent(func(value string) { trusteeType = " (" + value + ")" })
 
 	fmt.Printf("- %s%s\n", pAce.DN, dnType)
-	fmt.Printf("  ACEType: %s\n", pAce.AceType)
+	fmt.Printf("  ACEType:               %s\n", pAce.AceType)
 	if len(pAce.AceFlags) > 0 {
-		fmt.Printf("  ACEFlags: %s\n", strings.Join(pAce.AceFlags, ", "))
+		fmt.Printf("  ACEFlags:              %s\n", strings.Join(pAce.AceFlags, ", "))
 	}
 	if len(pAce.AccessMask) > 0 {
-		fmt.Printf("  AccessMask: %s\n", strings.Join(pAce.AccessMask, ", "))
+		fmt.Printf("  AccessMask:            %s\n", strings.Join(pAce.AccessMask, ", "))
 	}
-	fmt.Printf("  SecurityIdentifier: %s (%s)%s\n", pAce.Trustee.Principal.OrElse("UNKNOWN"), pAce.Trustee.Sid, trusteeType)
+	fmt.Printf("  SecurityIdentifier:    %s (%s)%s\n", pAce.Trustee.Principal.OrElse("UNKNOWN"), pAce.Trustee.Sid, trusteeType)
 	pAce.Object.IfPresent(func(value ParsedObject) {
-		fmt.Printf("  Object type: %s\n", value.Name.OrElse(value.ObjectType))
+		fmt.Printf("  Object type:           %s\n", value.Name.OrElse(value.ObjectType))
 	})
 	pAce.InheritedObject.IfPresent(func(value ParsedObject) {
 		fmt.Printf("  Inherited object type: %s\n", value.Name.OrElse(value.ObjectType))

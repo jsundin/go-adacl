@@ -1,0 +1,37 @@
+package values
+
+import (
+	"fmt"
+
+	"github.com/huner2/go-sddlparse/v2"
+)
+
+func AceTypeToString(aceType sddlparse.AceType) (string, error) {
+	if s, found := aceTypesDef[aceType]; found {
+		return s, nil
+	}
+	return "", fmt.Errorf("unknown acetype: %v", aceType)
+}
+
+var aceTypesDef = map[sddlparse.AceType]string{
+	sddlparse.ACETYPE_ACCESS_ALLOWED:                 "ACCESS_ALLOWED",
+	sddlparse.ACETYPE_ACCESS_DENIED:                  "ACCESS_DENIED",
+	sddlparse.ACETYPE_SYSTEM_AUDIT:                   "SYSTEM_AUDIT",
+	sddlparse.ACETYPE_SYSTEM_ALARM:                   "SYSTEM_ALARM",
+	sddlparse.ACETYPE_ACCESS_ALLOWED_COMPOUND:        "ACCESS_ALLOWED_COMPOUND",
+	sddlparse.ACETYPE_ACCESS_ALLOWED_OBJECT:          "ACCESS_ALLOWED_OBJECT",
+	sddlparse.ACETYPE_ACCESS_DENIED_OBJECT:           "ACCESS_DENIED_OBJECT",
+	sddlparse.ACETYPE_SYSTEM_AUDIT_OBJECT:            "SYSTEM_AUDIT_OBJECT",
+	sddlparse.ACETYPE_SYSTEM_ALARM_OBJECT:            "SYSTEM_ALARM_OBJECT",
+	sddlparse.ACETYPE_ACCESS_ALLOWED_CALLBACK:        "ACCESS_ALLOWED_CALLBACK",
+	sddlparse.ACETYPE_ACCESS_DENIED_CALLBACK:         "ACCESS_DENIED_CALLBACK",
+	sddlparse.ACETYPE_ACCESS_ALLOWED_CALLBACK_OBJECT: "ACCESS_ALLOWED_CALLBACK_OBJECT",
+	sddlparse.ACETYPE_ACCESS_DENIED_CALLBACK_OBJECT:  "ACCESS_DENIED_CALLBACK_OBJECT",
+	sddlparse.ACETYPE_SYSTEM_AUDIT_CALLBACK:          "SYSTEM_AUDIT_CALLBACK",
+	sddlparse.ACETYPE_SYSTEM_ALARM_CALLBACK:          "SYSTEM_ALARM_CALLBACK",
+	sddlparse.ACETYPE_SYSTEM_AUDIT_CALLBACK_OBJECT:   "SYSTEM_AUDIT_CALLBACK_OBJECT",
+	sddlparse.ACETYPE_SYSTEM_ALARM_CALLBACK_OBJECT:   "SYSTEM_ALARM_CALLBACK_OBJECT",
+	sddlparse.ACETYPE_SYSTEM_MANDATORY_LABEL:         "SYSTEM_MANDATORY_LABEL",
+	sddlparse.ACETYPE_SYSTEM_RESOURCE_ATTRIBUTE:      "SYSTEM_RESOURCE_ATTRIBUTE",
+	sddlparse.ACETYPE_SYSTEM_SCOPED_POLICY_ID:        "SYSTEM_SCOPED_POLICY_ID",
+}

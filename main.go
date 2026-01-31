@@ -93,7 +93,9 @@ func run(cmd *cobra.Command, args []string) error {
 			}
 			defer f.Close()
 
-			json.NewEncoder(f).Encode(jsonOutput)
+			if err = json.NewEncoder(f).Encode(jsonOutput); err != nil {
+				logrus.Errorf("failed to save json to '%s': %s'", appConf.JsonOutput, err)
+			}
 		}()
 	}
 

@@ -20,12 +20,13 @@ type ParsedObject struct {
 }
 
 type ParsedAce struct {
-	DN         string                    `json:"dn"`
-	DNType     optional.Optional[string] `json:"dnType"`
-	AceType    string                    `json:"aceType"`
-	AceFlags   []string                  `json:"aceFlags"`
-	AccessMask []string                  `json:"accessMask"`
-	Trustee    struct {
+	DN          string                    `json:"dn"`
+	DNType      optional.Optional[string] `json:"dnType"`
+	DNPrincipal optional.Optional[string] `json:"dnPrincipal"`
+	AceType     string                    `json:"aceType"`
+	AceFlags    []string                  `json:"aceFlags"`
+	AccessMask  []string                  `json:"accessMask"`
+	Trustee     struct {
 		Sid           string                    `json:"sid"`
 		Principal     optional.Optional[string] `json:"principal"`
 		PrincipalType optional.Optional[string] `json:"type"`
@@ -41,6 +42,7 @@ func parseAce(c *collector.Collector, objectDN string, ace *collector.AceEntry) 
 
 	if principal, exists := c.PrincipalsByDN[objectDN]; exists {
 		pAce.DNType = optional.Of(principal.PrincipalType)
+		pAce.DNPrincipal = optional.Of(principal.Name)
 	}
 	pAce.AceType, _ = values.AceTypeToString(ace.Type)
 	pAce.AceFlags = values.AceFlagsToString(ace.Flags)
@@ -83,7 +85,12 @@ func parseAce(c *collector.Collector, objectDN string, ace *collector.AceEntry) 
 
 func (pAce *ParsedAce) Print() {
 	dnType := ""
-	pAce.DNType.IfPresent(func(value string) { dnType = " (" + value + ")" })
+	dnTypeData := []string{}
+	pAce.DNType.IfPresent(func(value string) { dnTypeData = append(dnTypeData, value) })
+	pAce.DNPrincipal.IfPresent(func(value string) { dnTypeData = append(dnTypeData, value) })
+	if len(dnTypeData) > 0 {
+		dnType = " (" + strings.Join(dnTypeData, ": ") + ")"
+	}
 
 	trusteeType := ""
 	pAce.Trustee.PrincipalType.IfPresent(func(value string) { trusteeType = " (" + value + ")" })

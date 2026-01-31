@@ -4,6 +4,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/jsundin/go-adacl/values"
 	"github.com/sirupsen/logrus"
 )
 
@@ -15,8 +16,8 @@ type SidResolverContext struct {
 func newSidResolverContext() *SidResolverContext {
 	return &SidResolverContext{
 		sids: []string{
-			"S-1-1-0",  // Everyone
-			"S-1-5-11", // Authenticated Users
+			values.WellknownSidEveryone,
+			values.WellknownSidAuthenticatedUsers,
 		},
 	}
 }

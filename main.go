@@ -199,10 +199,6 @@ func resolveFilters(c *collector.Collector) filters.FilterSet {
 		filterSet.Add(filters.Include, filters.NewAceTypesMatcher(defaultInterestingAceTypes))
 	}
 
-	if appConf.Filters.IncludeInterestingAccessMasks {
-		filterSet.Add(filters.Include, filters.NewAccessMaskMatcher(defaultInterestingAccessMasks))
-	}
-
 	if appConf.Filters.ExcludeUninterestingTrustees {
 		filterSet.Add(filters.Exclude, filters.NewSidsMatcher(defaultUninterestingSidPatterns))
 	}
@@ -214,5 +210,11 @@ func resolveFilters(c *collector.Collector) filters.FilterSet {
 	if appConf.Filters.ExcludeInherited {
 		filterSet.Add(filters.Exclude, filters.NewAceFlagsMatcher([]sddlparse.AceFlag{sddlparse.ACEFLAG_INHERITED}))
 	}
+
+	if appConf.Filters.IncludeInterestingAccessMasks {
+		filterSet.Add(filters.Include, filters.NewAccessMaskMatcher(defaultInterestingAccessMasks))
+		filterSet.Add(filters.Exclude, filters.NewEveryoneExtendedRightsMatcher())
+	}
+
 	return filterSet
 }

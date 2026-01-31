@@ -23,6 +23,11 @@ func GetWellknownSidPatternFromName(name string) (string, bool) {
 	return "", false
 }
 
+const (
+	WellknownSidAuthenticatedUsers = "S-1-5-11"
+	WellknownSidEveryone           = "S-1-1-0"
+)
+
 var wellKnownSids = map[string]string{
 	// from impackets dacledit.py
 	"S-1-0":        "Null Authority",

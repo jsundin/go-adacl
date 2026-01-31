@@ -93,7 +93,10 @@ func (pAce *ParsedAce) Print() {
 	}
 
 	trusteeType := ""
-	pAce.Trustee.PrincipalType.IfPresent(func(value string) { trusteeType = " (" + value + ")" })
+	trusteeTypeData := []string{}
+	pAce.Trustee.PrincipalType.IfPresent(func(value string) { trusteeTypeData = append(trusteeTypeData, value) })
+	pAce.Trustee.Principal.IfPresent(func(value string) { trusteeTypeData = append(trusteeTypeData, value) })
+	trusteeType = " (" + strings.Join(trusteeTypeData, ": ") + ")"
 
 	fmt.Printf("- %s%s\n", pAce.DN, dnType)
 	fmt.Printf("  ACEType:               %s\n", pAce.AceType)
@@ -103,7 +106,7 @@ func (pAce *ParsedAce) Print() {
 	if len(pAce.AccessMask) > 0 {
 		fmt.Printf("  AccessMask:            %s\n", strings.Join(pAce.AccessMask, ", "))
 	}
-	fmt.Printf("  SecurityIdentifier:    %s (%s)%s\n", pAce.Trustee.Principal.OrElse("UNKNOWN"), pAce.Trustee.Sid, trusteeType)
+	fmt.Printf("  SecurityIdentifier:    %s%s\n", pAce.Trustee.Sid, trusteeType)
 	pAce.Object.IfPresent(func(value ParsedObject) {
 		fmt.Printf("  Object type:           %s\n", value.Name.OrElse(value.ObjectType))
 	})

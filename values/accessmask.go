@@ -1,6 +1,8 @@
 package values
 
-import "github.com/huner2/go-sddlparse/v2"
+import (
+	"github.com/huner2/go-sddlparse/v2"
+)
 
 const (
 	ACCESS_MASK_FULL_CONTROL     = sddlparse.AccessMask(0xf01ff)
@@ -19,7 +21,6 @@ func AccessMaskToString(mask sddlparse.AccessMask) []string {
 			arr = append(arr, label)
 		}
 	}
-
 	for v, label := range rawAccessMasksDef {
 		if mask&v == v {
 			mask = mask & (^v)
@@ -35,7 +36,6 @@ func AccessMaskToString(mask sddlparse.AccessMask) []string {
 			arr2 = append(arr2, v)
 		}
 	}
-
 	return arr2
 }
 
@@ -62,8 +62,10 @@ var rawAccessMasksDef = map[sddlparse.AccessMask]string{
 	sddlparse.ACCESS_MASK_ADS_RIGHT_DS_CONTROL_ACCESS: "ADS_RIGHT_DS_CONTROL_ACCESS",
 }
 
-// dacledit.py
 var usefulAccessMasksDef = map[sddlparse.AccessMask]string{
+	0xffffffff: "*",
+
+	// dacledit.py
 	ACCESS_MASK_FULL_CONTROL:     "FullControl",
 	ACCESS_MASK_MODIFY:           "Modify",
 	ACCESS_MASK_READ_AND_EXECUTE: "ReadAndExecute",
@@ -73,14 +75,24 @@ var usefulAccessMasksDef = map[sddlparse.AccessMask]string{
 }
 
 var prettyAccessMasksTranslations = map[string]string{
-	"ACCESS_MASK_ADS_RIGHT_DS_CONTROL_ACCESS": "ControlAccess",
-	"ADS_RIGHT_DS_CREATE_CHILD":               "CreateChild",
-	"ADS_RIGHT_DS_DELETE_CHILD":               "DeleteChild",
-	"ADS_RIGHT_DS_READ_PROP":                  "ReadProperty",
-	"ADS_RIGHT_DS_WRITE_PROP":                 "WriteProperty",
-	"ADS_RIGHT_DS_SELF":                       "Self",
-	"WRITE_DACL":                              "WriteDacl",
-	"WRITE_OWNER":                             "WriteOwner",
-	"DELETE":                                  "Delete",
-	"ADS_RIGHT_DS_DELETE_TREE":                "DeleteTree",
+	"GENERIC_READ":                "GenericRead",
+	"GENERIC_WRITE":               "GenericWrite",
+	"GENERIC_EXECUTE":             "GenericExecute",
+	"GENERIC_ALL":                 "GenericAll",
+	"MAXIMUM_ALLOWED":             "MaximumAllowed",
+	"ACCESS_SYSTEM_SECURITY":      "AccessSystemSecurity",
+	"SYNCHRONIZE":                 "Synchronize",
+	"WRITE_OWNER":                 "WriteOwner",
+	"WRITE_DACL":                  "WriteDacl",
+	"READ_CONTROL":                "ReadControl",
+	"DELETE":                      "Delete",
+	"ADS_RIGHT_DS_CREATE_CHILD":   "CreateChild",
+	"ADS_RIGHT_DS_DELETE_CHILD":   "DeleteChild",
+	"ADS_RIGHT_DS_LIST_CONTENTS":  "ListContents",
+	"ADS_RIGHT_DS_SELF":           "Self",
+	"ADS_RIGHT_DS_READ_PROP":      "ReadProp",
+	"ADS_RIGHT_DS_WRITE_PROP":     "WriteProp",
+	"ADS_RIGHT_DS_DELETE_TREE":    "DeleteTree",
+	"ADS_RIGHT_DS_LIST_OBJECT":    "ListObject",
+	"ADS_RIGHT_DS_CONTROL_ACCESS": "ControlAccess",
 }

@@ -48,7 +48,8 @@ func (c *Collector) processObject(ent *ldap.Entry) error {
 			logrus.Warnf("could not parse sddl for: dn='%s'", ent.DN)
 		} else {
 			for _, ace := range sddl.DACL {
-				c.AcesByDN[ent.DN] = append(c.AcesByDN[ent.DN], c.processAce(ace))
+				aceEntry := c.processAce(ace)
+				c.AcesByDN[ent.DN] = append(c.AcesByDN[ent.DN], aceEntry)
 			}
 		}
 	}

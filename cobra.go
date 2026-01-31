@@ -60,7 +60,7 @@ func init() {
 	f.BoolVar(&appConf.Stdout, "stdout", true, "print results to stdout")
 	f.StringVar(&appConf.JsonOutput, "json", "", "write results to a json file")
 	f.StringVar(&appConf.CacheFile, "cache", "", "cache file")
-	f.StringVar(&appConf.LogLevel, "loglevel", "debug", "log level (see logrus for details)")
+	f.StringVar(&appConf.LogLevel, "loglevel", "info", "log level (see logrus for details)")
 	f.BoolVar(&appConf.LdapDebug, "debug", false, "print ldap debug information (this does not imply --loglevel debug)")
 }
 

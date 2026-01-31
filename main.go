@@ -216,5 +216,9 @@ func resolveFilters(c *collector.Collector) filters.FilterSet {
 		filterSet.Add(filters.Exclude, filters.NewEveryoneExtendedRightsMatcher())
 	}
 
+	if appConf.Filters.IncludePrincipalTrustees {
+		filterSet.Add(filters.Include, filters.NewSidHasPrincipalMatcher(c))
+	}
+
 	return filterSet
 }

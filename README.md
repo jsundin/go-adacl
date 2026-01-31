@@ -24,7 +24,6 @@ Parameters:
 ```
   -s, --secure                            use ldaps instead of ldap
       --host string                       ldap server with optional port (eg dc.mydomain.local or 10.0.0.10, or 10.0.0.10:389)
-
   -d, --domain string                     domain
   -u, --username string                   username
   -p, --password string                   password
@@ -46,17 +45,17 @@ Parameters:
   -I, --include-me                        if set, the results from 'whoami' will be added to '--include-trustee'
       --exclude-uninteresting-trustees    exclude boring trustees (default true)
       --exclude-trustee strings           exclude trustees (sid or principal) (will *not* resolve groups)
+      --include-principals                only include objects where the trustee is a principal
       --include-interesting-ace-types     only include interesting ace types (default true)
       --include-interesting-accessmasks   only include interesting access masks (default true)
       --exclude-inherited                 exclude inherited aces
-
+      
       --stdout                            print results to stdout (default true)
       --json string                       write results to a json file
       --cache string                      cache file
-      --loglevel string                   log level (see logrus for details) (default "debug")
+      --loglevel string                   log level (see logrus for details) (default "info")
       --debug                             print ldap debug information (this does not imply --loglevel debug)
-  -h, --help                              help for go-adacl
-```
+  -h, --help                              help for go-adacl```
 
 Environment variables:
 ```

@@ -46,6 +46,7 @@ type CliConfig struct {
 		IncludeWhoami                bool     // only include objects with me as a trustee
 		ExcludeUninterestingTrustees bool     // exclude boring trustees (sids)
 		ExcludeTrustees              []string // exclude objects with these trustees
+		IncludePrincipalTrustees     bool     // only include objects where the trustee resolves to a principal
 
 		IncludeInterestingAceTypes    bool // only include interesting ace types
 		IncludeInterestingAccessMasks bool // only include interesting access masks

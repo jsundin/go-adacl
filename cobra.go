@@ -52,6 +52,7 @@ func init() {
 	f.BoolVarP(&appConf.Filters.IncludeWhoami, "include-me", "I", false, "if set, the results from 'whoami' will be added to '--include-trustee'")
 	f.BoolVar(&appConf.Filters.ExcludeUninterestingTrustees, "exclude-uninteresting-trustees", true, "exclude boring trustees")
 	f.StringSliceVar(&appConf.Filters.ExcludeTrustees, "exclude-trustee", []string{}, "exclude trustees (sid or principal) (will *not* resolve groups)")
+	f.BoolVar(&appConf.Filters.IncludePrincipalTrustees, "include-principals", false, "only include objects where the trustee is a principal")
 
 	f.BoolVar(&appConf.Filters.IncludeInterestingAceTypes, "include-interesting-ace-types", true, "only include interesting ace types")
 	f.BoolVar(&appConf.Filters.IncludeInterestingAccessMasks, "include-interesting-accessmasks", true, "only include interesting access masks")

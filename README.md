@@ -55,7 +55,8 @@ Parameters:
       --cache string                      cache file
       --loglevel string                   log level (see logrus for details) (default "info")
       --debug                             print ldap debug information (this does not imply --loglevel debug)
-  -h, --help                              help for go-adacl```
+  -h, --help                              help for go-adacl
+```
 
 Environment variables:
 ```

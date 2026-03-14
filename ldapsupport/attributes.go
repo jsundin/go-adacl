@@ -10,4 +10,6 @@ const (
 	AttrPrimaryGroupID       = "primaryGroupID"
 	AttrObjectClass          = "objectClass"
 	AttrGroupMSAMembership   = "msDS-GroupMSAMembership"
+	AttrSchemaIDGUID         = "schemaIDGUID"
+	AttrCN                   = "cn"
 )

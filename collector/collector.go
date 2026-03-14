@@ -19,9 +19,10 @@ type Collector struct {
 	AuthzId             string
 	ServerConfiguration ServerConfiguration
 
-	OrderedDNs     []string
-	PrincipalsByDN map[string]*Principal
-	AcesByDN       map[string][]*AceEntry
+	OrderedDNs        []string
+	PrincipalsByDN    map[string]*Principal
+	AcesByDN          map[string][]*AceEntry
+	ObjectTypesByGUID map[string]string
 }
 
 type ServerConfiguration struct {
@@ -66,8 +67,9 @@ func NewCollector(ldapAddr string, binder binders.Binder, ldapDebug bool) (*Coll
 		conn:       conn,
 		ServerAddr: ldapAddr,
 
-		PrincipalsByDN: map[string]*Principal{},
-		AcesByDN:       map[string][]*AceEntry{},
+		PrincipalsByDN:    map[string]*Principal{},
+		AcesByDN:          map[string][]*AceEntry{},
+		ObjectTypesByGUID: map[string]string{},
 	}, nil
 }
 

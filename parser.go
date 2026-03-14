@@ -57,30 +57,32 @@ func parseAce(c *collector.Collector, objectDN string, ace *collector.AceEntry) 
 	}
 
 	ace.ObjectType.IfPresent(func(value string) {
-		var name optional.Optional[string]
-		if resolved, found := values.ResolveWellknownObjectType(value); found {
-			name = optional.Of(resolved)
-		}
-
 		pAce.Object = optional.Of(ParsedObject{
 			ObjectType: value,
-			Name:       name,
+			Name:       resolveObjectType(c, value),
 		})
 	})
 
 	ace.InheritedObjectType.IfPresent(func(value string) {
-		var name optional.Optional[string]
-		if resolved, found := values.ResolveWellknownObjectType(value); found {
-			name = optional.Of(resolved)
-		}
-
 		pAce.InheritedObject = optional.Of(ParsedObject{
 			ObjectType: value,
-			Name:       name,
+			Name:       resolveObjectType(c, value),
 		})
 	})
 
 	return &pAce
+}
+
+func resolveObjectType(c *collector.Collector, objectType string) optional.Optional[string] {
+	if resolved, found := c.ObjectTypesByGUID[objectType]; found {
+		return optional.Of(resolved)
+	}
+
+	if resolved, found := values.ResolveWellknownObjectType(objectType); found {
+		return optional.Of(resolved)
+	}
+
+	return optional.Empty[string]()
 }
 
 func (pAce *ParsedAce) Print() {

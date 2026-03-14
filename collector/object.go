@@ -20,12 +20,22 @@ func (c *Collector) processObject(ent *ldap.Entry) error {
 		objectSid = optional.Of(objectsid.Decode(rawSid).String())
 	}
 
+	objectClasses := ent.GetAttributeValues(ldapsupport.AttrObjectClass)
+
+	if slices.Contains(objectClasses, "attributeSchema") && len(ent.GetAttributeValues(ldapsupport.AttrSchemaIDGUID)) > 0 {
+		guid, err := ldapsupport.UnmarshalGuid(ent.GetRawAttributeValue(ldapsupport.AttrSchemaIDGUID))
+		if err != nil {
+			logrus.Warnf("unable to parse guid for: dn='%s'", ent.DN)
+		} else {
+			c.ObjectTypesByGUID[guid.String()] = ent.GetAttributeValue(ldapsupport.AttrCN)
+		}
+	}
+
 	if len(ent.GetAttributeValues(ldapsupport.AttrSamAccountName)) > 0 {
 		p := c.getOrAddPrincipal(ent.DN)
 		p.Sid = objectSid.OrElse("missing")
 		p.Name = ent.GetAttributeValue(ldapsupport.AttrSamAccountName)
 
-		objectClasses := ent.GetAttributeValues(ldapsupport.AttrObjectClass)
 		if slices.Contains(objectClasses, "computer") {
 			p.PrincipalType = "computer"
 		} else if slices.Contains(objectClasses, "user") {

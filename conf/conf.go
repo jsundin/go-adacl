@@ -51,6 +51,7 @@ type CliConfig struct {
 		IncludeInterestingAceTypes    bool // only include interesting ace types
 		IncludeInterestingAccessMasks bool // only include interesting access masks
 		ExcludeInherited              bool // exclude inherited aces
+		ExcludeInheritOnly            bool // exclude aces that does not apply to current object
 	}
 }
 

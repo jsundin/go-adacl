@@ -49,7 +49,8 @@ Parameters:
       --include-interesting-ace-types     only include interesting ace types (default true)
       --include-interesting-accessmasks   only include interesting access masks (default true)
       --exclude-inherited                 exclude inherited aces
-      
+      --exclude-inherit-only              exclude aces that are only inherited and does not apply to current object
+
       --stdout                            print results to stdout (default true)
       --json string                       write results to a json file
       --cache string                      cache file

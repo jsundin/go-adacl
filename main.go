@@ -211,6 +211,10 @@ func resolveFilters(c *collector.Collector) filters.FilterSet {
 		filterSet.Add(filters.Exclude, filters.NewAceFlagsMatcher([]sddlparse.AceFlag{sddlparse.ACEFLAG_INHERITED}))
 	}
 
+	if appConf.Filters.ExcludeInheritOnly {
+		filterSet.Add(filters.Exclude, filters.NewAceFlagsMatcher([]sddlparse.AceFlag{sddlparse.ACEFLAG_INHERIT_ONLY}))
+	}
+
 	if appConf.Filters.IncludeInterestingAccessMasks {
 		filterSet.Add(filters.Include, filters.NewAccessMaskMatcher(defaultInterestingAccessMasks))
 		filterSet.Add(filters.Exclude, filters.NewEveryoneExtendedRightsMatcher())

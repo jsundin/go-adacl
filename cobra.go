@@ -57,6 +57,7 @@ func init() {
 	f.BoolVar(&appConf.Filters.IncludeInterestingAceTypes, "include-interesting-ace-types", true, "only include interesting ace types")
 	f.BoolVar(&appConf.Filters.IncludeInterestingAccessMasks, "include-interesting-accessmasks", true, "only include interesting access masks")
 	f.BoolVar(&appConf.Filters.ExcludeInherited, "exclude-inherited", false, "exclude inherited aces")
+	f.BoolVar(&appConf.Filters.ExcludeInheritOnly, "exclude-inherit-only", false, "exclude aces that are only inherited and does not apply to current object")
 
 	f.BoolVar(&appConf.Stdout, "stdout", true, "print results to stdout")
 	f.StringVar(&appConf.JsonOutput, "json", "", "write results to a json file")

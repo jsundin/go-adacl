@@ -91,6 +91,64 @@ go-adacl \
 ```
 
 ### Examples
+```
+$ impacket-getTGT lumons.hacksmarter/intranetsvc:'*'
+Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies
+
+[*] Saving ticket in intranetsvc.ccach
+
+$ export KRB5CCNAME=intranetsvc.ccache
+
+$ go-adacl -d lumons.hacksmarter -s --host DC01.lumons.hacksmarter -k --include-trustee peterk --exclude-trustee 'Authenticated Users','Domain Users' --exclude-inherit-only --loglevel debug
+DEBU[0000] attempting to dial ldap 'ldaps://DC01.lumons.hacksmarter:636'
+DEBU[0000] attempting to load ccache from file 'intranetsvc.ccache'
+DEBU[0000] parsed ccache: realm='LUMONS.HACKSMARTER', principal='intranetsvc'
+DEBU[0000] collected whoami: 'u:LUMONS\IntranetSvc'
+DEBU[0000] collected server configuration: defaultNamingContext='DC=lumons,DC=hacksmarter', namingContexts='[[DC=lumons,DC=hacksmarter CN=Configuration,DC=lumons,DC=hacksmarter CN=Schema,CN=Configuration,DC=lumons,DC=hacksmarter DC=DomainDnsZones,DC=lumons,DC=hacksmarter DC=ForestDnsZones,DC=lumons,DC=hacksmarter]]
+DEBU[0000] collecting information from: dn='DC=lumons,DC=hacksmarter'
+DEBU[0001] collecting information from: dn='CN=Configuration,DC=lumons,DC=hacksmarter'
+DEBU[0002] collecting information from: dn='CN=Schema,CN=Configuration,DC=lumons,DC=hacksmarter'
+DEBU[0002] collecting information from: dn='DC=DomainDnsZones,DC=lumons,DC=hacksmarter'
+DEBU[0002] collecting information from: dn='DC=ForestDnsZones,DC=lumons,DC=hacksmarter'
+DEBU[0002] collected 3801 dns, 85 principals and 23589 aces
+DEBU[0002] adding sid 'S-1-5-21-2415474065-2758488157-2192222713-1108' (CN=Peter Kilmer,OU=Management,OU=Lumons Users,OU=PE,DC=lumons,DC=hacksmarter)
+DEBU[0002] adding sid 'S-1-5-21-2415474065-2758488157-2192222713-513' (CN=Domain Users,CN=Users,DC=lumons,DC=hacksmarter)
+DEBU[0002] adding sid 'S-1-5-32-545' (CN=Users,CN=Builtin,DC=lumons,DC=hacksmarter)
+DEBU[0002] adding sid 'S-1-5-21-2415474065-2758488157-2192222713-1112' (CN=Web Admins,OU=Lumons Groups,OU=PE,DC=lumons,DC=hacksmarter)
+DEBU[0002] adding sid 'S-1-5-21-2415474065-2758488157-2192222713-1110' (CN=LapsAdmins,OU=Lumons Groups,OU=PE,DC=lumons,DC=hacksmarter)
+DEBU[0002] resolved 8 filters
+- OU=Lumons Users,OU=PE,DC=lumons,DC=hacksmarter
+  ACEType:               ACCESS_DENIED
+  AccessMask:            DeleteChild
+  SecurityIdentifier:    S-1-1-0 (Everyone)
+
+- CN=INTRANET,OU=Lumons Servers,OU=PE,DC=lumons,DC=hacksmarter (computer: INTRANET$)
+  ACEType:               ACCESS_ALLOWED_OBJECT
+  ACEFlags:              INHERITED, CONTAINER_INHERIT
+  AccessMask:            ControlAccess
+  SecurityIdentifier:    S-1-5-21-2415474065-2758488157-2192222713-1110 (group: lapsAdmins)
+  Object type:           ms-LAPS-Password
+  Inherited object type: Computer
+
+- CN=INTRANET,OU=Lumons Servers,OU=PE,DC=lumons,DC=hacksmarter (computer: INTRANET$)
+  ACEType:               ACCESS_ALLOWED_OBJECT
+  ACEFlags:              CONTAINER_INHERIT, INHERITED
+  AccessMask:            ControlAccess
+  SecurityIdentifier:    S-1-5-21-2415474065-2758488157-2192222713-1110 (group: lapsAdmins)
+  Object type:           ms-LAPS-EncryptedPassword
+  Inherited object type: Computer
+
+- CN=INTRANET,OU=Lumons Servers,OU=PE,DC=lumons,DC=hacksmarter (computer: INTRANET$)
+  ACEType:               ACCESS_ALLOWED_OBJECT
+  ACEFlags:              CONTAINER_INHERIT, INHERITED
+  AccessMask:            ReadProp, ControlAccess
+  SecurityIdentifier:    S-1-5-21-2415474065-2758488157-2192222713-1110 (group: lapsAdmins)
+  Object type:           ms-LAPS-EncryptedPasswordHistory
+  Inherited object type: Computer
+
+DEBU[0002] 4 aces processed, and 23585 were filtered
+```
+
 #### 1: Working with cached collections
 This will
 - On first execution this will login using kerberos (simple, username+password), and save collected information to `/tmp/acl-cache`

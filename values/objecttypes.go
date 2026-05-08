@@ -1,10 +1,18 @@
 package values
 
+const (
+	ObjectType_GroupMSAMembership = "888eedd6-ce04-df40-b462-b8a50e41ba38"
+	ObjectType_SyntheticOwner     = "f2285434-4b23-11f1-9fcd-13395dcb23ec"
+)
+
 func ResolveWellknownObjectType(guid string) (string, bool) {
 	if v, found := extendedRights[guid]; found {
 		return v, true
 	}
 	if v, found := schemaObjects[guid]; found {
+		return v, true
+	}
+	if v, found := syntheticObjects[guid]; found {
 		return v, true
 	}
 	return "", false
@@ -1865,4 +1873,8 @@ var schemaObjects = map[string]string{
 	"ca2a281e-262b-4ff7-b419-bc123352a4e9": "ms-WMI-TargetType",
 	"7bfdcb86-4807-11d1-a9c3-0000f80367c1": "QueryPoint",
 	"3c08b569-801f-4158-b17b-e363d6ae696a": "ms-TS-Endpoint-Plugin",
+}
+
+var syntheticObjects = map[string]string{
+	"f2285434-4b23-11f1-9fcd-13395dcb23ec": "Owner",
 }

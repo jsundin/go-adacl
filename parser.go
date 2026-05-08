@@ -86,33 +86,28 @@ func resolveObjectType(c *collector.Collector, objectType string) optional.Optio
 }
 
 func (pAce *ParsedAce) Print() {
-	dnType := ""
-	dnTypeData := []string{}
-	pAce.DNType.IfPresent(func(value string) { dnTypeData = append(dnTypeData, value) })
-	pAce.DNPrincipal.IfPresent(func(value string) { dnTypeData = append(dnTypeData, value) })
-	if len(dnTypeData) > 0 {
-		dnType = " (" + strings.Join(dnTypeData, ": ") + ")"
-	}
-
 	trusteeType := ""
 	trusteeTypeData := []string{}
 	pAce.Trustee.PrincipalType.IfPresent(func(value string) { trusteeTypeData = append(trusteeTypeData, value) })
 	pAce.Trustee.Principal.IfPresent(func(value string) { trusteeTypeData = append(trusteeTypeData, value) })
 	trusteeType = " (" + strings.Join(trusteeTypeData, ": ") + ")"
 
-	fmt.Printf("- %s%s\n", pAce.DN, dnType)
-	fmt.Printf("  ACEType:               %s\n", pAce.AceType)
-	if len(pAce.AceFlags) > 0 {
-		fmt.Printf("  ACEFlags:              %s\n", strings.Join(pAce.AceFlags, ", "))
+	if pAce.Object.Present() && pAce.Object.Get().ObjectType == values.ObjectType_SyntheticOwner {
+		fmt.Printf("  Owner:                 %s%s\n", pAce.Trustee.Sid, trusteeType)
+	} else {
+		fmt.Printf("  ACEType:               %s\n", pAce.AceType)
+		if len(pAce.AceFlags) > 0 {
+			fmt.Printf("  ACEFlags:              %s\n", strings.Join(pAce.AceFlags, ", "))
+		}
+		if len(pAce.AccessMask) > 0 {
+			fmt.Printf("  AccessMask:            %s\n", strings.Join(pAce.AccessMask, ", "))
+		}
+		fmt.Printf("  SecurityIdentifier:    %s%s\n", pAce.Trustee.Sid, trusteeType)
+		pAce.Object.IfPresent(func(value ParsedObject) {
+			fmt.Printf("  Object type:           %s\n", value.Name.OrElse(value.ObjectType))
+		})
+		pAce.InheritedObject.IfPresent(func(value ParsedObject) {
+			fmt.Printf("  Inherited object type: %s\n", value.Name.OrElse(value.ObjectType))
+		})
 	}
-	if len(pAce.AccessMask) > 0 {
-		fmt.Printf("  AccessMask:            %s\n", strings.Join(pAce.AccessMask, ", "))
-	}
-	fmt.Printf("  SecurityIdentifier:    %s%s\n", pAce.Trustee.Sid, trusteeType)
-	pAce.Object.IfPresent(func(value ParsedObject) {
-		fmt.Printf("  Object type:           %s\n", value.Name.OrElse(value.ObjectType))
-	})
-	pAce.InheritedObject.IfPresent(func(value ParsedObject) {
-		fmt.Printf("  Inherited object type: %s\n", value.Name.OrElse(value.ObjectType))
-	})
 }

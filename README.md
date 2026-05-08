@@ -95,7 +95,7 @@ go-adacl \
 $ impacket-getTGT lumons.hacksmarter/intranetsvc:'*'
 Impacket v0.14.0.dev0 - Copyright Fortra, LLC and its affiliated companies
 
-[*] Saving ticket in intranetsvc.ccach
+[*] Saving ticket in intranetsvc.ccache
 
 $ export KRB5CCNAME=intranetsvc.ccache
 

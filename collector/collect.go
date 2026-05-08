@@ -51,7 +51,7 @@ func (c *Collector) Collect(dn string) error {
 
 	sdFlagsCtrl := &ldap.ControlMicrosoftSDFlags{
 		Criticality:  true,
-		ControlValue: ldapsupport.SDFLAGS_DACL_SECURITY_INFORMATION,
+		ControlValue: ldapsupport.SDFLAGS_DACL_SECURITY_INFORMATION | ldapsupport.SDFLAGS_OWNER_SECURITY_INFORMATION,
 	}
 
 	pagingCtrl := ldap.NewControlPaging(ldapsupport.LDAP_PAGING_SIZE)

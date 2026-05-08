@@ -63,6 +63,8 @@ func run(cmd *cobra.Command, args []string) error {
 	}
 
 	for _, objectDN := range c.OrderedDNs {
+		displayDN := true
+
 		for _, ace := range c.AcesByDN[objectDN] {
 			if filterSet.Applies(objectDN, ace) {
 				filtered++
@@ -71,6 +73,19 @@ func run(cmd *cobra.Command, args []string) error {
 			unfiltered++
 
 			parsedAce := parseAce(c, objectDN, ace)
+
+			if displayDN {
+				displayDN = false
+				dnType := ""
+				dnTypeData := []string{}
+				parsedAce.DNType.IfPresent(func(value string) { dnTypeData = append(dnTypeData, value) })
+				parsedAce.DNPrincipal.IfPresent(func(value string) { dnTypeData = append(dnTypeData, value) })
+				if len(dnTypeData) > 0 {
+					dnType = " (" + strings.Join(dnTypeData, ": ") + ")"
+				}
+				fmt.Printf("- %s%s\n", parsedAce.DN, dnType)
+			}
+
 			if appConf.Stdout {
 				parsedAce.Print()
 				fmt.Println()

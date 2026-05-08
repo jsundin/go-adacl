@@ -9,6 +9,7 @@ import (
 	"github.com/huner2/go-sddlparse/v2"
 	"github.com/jsundin/go-adacl/ldapsupport"
 	"github.com/jsundin/go-adacl/optional"
+	"github.com/jsundin/go-adacl/values"
 	"github.com/sirupsen/logrus"
 )
 
@@ -57,6 +58,15 @@ func (c *Collector) processObject(ent *ldap.Entry) error {
 		if sddl, err := sddlparse.SDDLFromBinary(rawSD); err != nil {
 			logrus.Warnf("could not parse sddl for: dn='%s': %s", ent.DN, err)
 		} else {
+			ownerEntry := &AceEntry{
+				Type:       sddlparse.ACETYPE_ACCESS_ALLOWED,
+				Flags:      0,
+				AccessMask: values.ACCESS_MASK_FULL_CONTROL,
+				SID:        sddl.Owner,
+				ObjectType: optional.Of(values.ObjectType_SyntheticOwner),
+			}
+			c.AcesByDN[ent.DN] = append(c.AcesByDN[ent.DN], ownerEntry)
+
 			for _, ace := range sddl.DACL {
 				aceEntry := c.processAce(ace)
 				c.AcesByDN[ent.DN] = append(c.AcesByDN[ent.DN], aceEntry)
@@ -70,7 +80,7 @@ func (c *Collector) processObject(ent *ldap.Entry) error {
 		} else {
 			for _, ace := range sddl.DACL {
 				aceEntry := c.processAce(ace)
-				aceEntry.ObjectType = optional.Of("888eedd6-ce04-df40-b462-b8a50e41ba38") // ms-DS-GroupMSAMembership
+				aceEntry.ObjectType = optional.Of(values.ObjectType_GroupMSAMembership)
 				c.AcesByDN[ent.DN] = append(c.AcesByDN[ent.DN], aceEntry)
 			}
 		}

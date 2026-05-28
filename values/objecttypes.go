@@ -1,8 +1,9 @@
 package values
 
 const (
-	ObjectType_GroupMSAMembership = "888eedd6-ce04-df40-b462-b8a50e41ba38"
-	ObjectType_SyntheticOwner     = "f2285434-4b23-11f1-9fcd-13395dcb23ec"
+	ObjectType_GroupMSAMembership                  = "888eedd6-ce04-df40-b462-b8a50e41ba38"
+	ObjectType_AllowedToActOnBehalfOfOtherIdentity = "3f78c3e5-f79a-46bd-a0b8-9d18116ddc79"
+	ObjectType_SyntheticOwner                      = "f2285434-4b23-11f1-9fcd-13395dcb23ec"
 )
 
 func ResolveWellknownObjectType(guid string) (string, bool) {

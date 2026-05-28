@@ -74,18 +74,24 @@ func (c *Collector) processObject(ent *ldap.Entry) error {
 		}
 	}
 
-	for _, rawSD := range ent.GetRawAttributeValues(ldapsupport.AttrGroupMSAMembership) {
+	c.parseCustomACLAttribute(ent, ldapsupport.AttrGroupMSAMembership, values.ObjectType_GroupMSAMembership)
+	c.parseCustomACLAttribute(ent, ldapsupport.AttrAllowedToActOnBehalfOfOtherIdentity, values.ObjectType_AllowedToActOnBehalfOfOtherIdentity)
+	return nil
+}
+
+func (c *Collector) parseCustomACLAttribute(ent *ldap.Entry, attributeName string, objectType string) {
+	for _, rawSD := range ent.GetRawAttributeValues(attributeName) {
 		if sddl, err := sddlparse.SDDLFromBinary(rawSD); err != nil {
-			logrus.Warnf("could not parse gmsa sddl for: dn='%s': %s", ent.DN, err)
+			logrus.Warnf("could not parse sddl for attribute '%s' and dn='%s': %s", attributeName, ent.DN, err)
 		} else {
 			for _, ace := range sddl.DACL {
 				aceEntry := c.processAce(ace)
-				aceEntry.ObjectType = optional.Of(values.ObjectType_GroupMSAMembership)
+				aceEntry.ObjectType = optional.Of(objectType)
 				c.AcesByDN[ent.DN] = append(c.AcesByDN[ent.DN], aceEntry)
 			}
+
 		}
 	}
-	return nil
 }
 
 func (c *Collector) processAce(ace *sddlparse.ACE) *AceEntry {

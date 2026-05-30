@@ -152,7 +152,7 @@ func collectInformation() (*collector.Collector, error) {
 
 	for _, dn := range searchDNs {
 		if err = c.Collect(dn); err != nil {
-			return nil, fmt.Errorf("collection of dn '%s' failed: %s", dn, err)
+			logrus.Warnf("collection of dn '%s' failed: %s", dn, err)
 		}
 	}
 
